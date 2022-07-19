@@ -9,8 +9,8 @@ const config = {
         // Backend API Proxy
         target: 'http://127.0.0.1:8000/'
       },
-      '/api/ws': {
-        // Backend API Proxy
+      '/api/ws/': {
+        // WebSocket Proxy
         target: 'http://127.0.0.1:8000/',
         ws: true,
       },

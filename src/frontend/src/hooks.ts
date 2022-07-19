@@ -14,14 +14,15 @@ export async function handle({ event, resolve }: HandlerArguments) {
   console.log()
 
   if (isLoggedIn) {
+    // Response.redirect('/endpoint') doesn't work for some reason
     if (authEndpoints.includes(url)) {
       event.url.pathname = '/';
-      return Response.redirect(event.url, 303);
+      return Response.redirect(event.url);
     }
   } else {
     if (!authEndpoints.includes(url)) {
       event.url.pathname = '/welcome';
-      return Response.redirect(event.url, 303);
+      return Response.redirect(event.url);
     }
   }
 
