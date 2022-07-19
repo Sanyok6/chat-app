@@ -22,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'is_staff')
+        fields = ('id', 'username', 'is_staff', 'is_online', 'is_banned')
 
 
 class LoginSerializer(serializers.Serializer):

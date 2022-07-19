@@ -11,7 +11,6 @@ class ChatRoomCreateSerializer(serializers.ModelSerializer):
 
 
 class ChatRoomSerializer(ChatRoomCreateSerializer):
-    creator = UserSerializer()
     class Meta(ChatRoomCreateSerializer.Meta):
         fields = '__all__'
 
@@ -19,7 +18,7 @@ class ChatRoomSerializer(ChatRoomCreateSerializer):
 class MessageCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Message
-        fields = ('author', 'content')
+        fields = ('content',)
 
 
 class MessageSerializer(MessageCreateSerializer):

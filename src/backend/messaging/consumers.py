@@ -1,19 +1,9 @@
 import json
 
 from asgiref.sync import async_to_sync
-from authentication.serializers import UserSerializer
 from channels.generic.websocket import WebsocketConsumer
 
 from .models import ChatRoom
-from .serializers import ChatRoomSerializer
-
-
-def get_ready_event_payload(user, *, k_user_data="user", k_public_chats="public_chats"):
-    return {
-        k_user_data: UserSerializer(user).data,
-        k_public_chats: ChatRoomSerializer(ChatRoom.objects.filter(is_public=True), many=True).data,
-    }
-
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
@@ -36,8 +26,6 @@ class ChatConsumer(WebsocketConsumer):
         user.save()
 
         self.accept()
-
-        self.dispatch_named_event("READY", get_ready_event_payload(user))
 
     def disconnect(self, close_code):
         user = self.scope["user"]
