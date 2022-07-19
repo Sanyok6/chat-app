@@ -4,13 +4,14 @@ from asgiref.sync import async_to_sync
 from authentication.serializers import UserSerializer
 from channels.generic.websocket import WebsocketConsumer
 
-from .models import Message
-from .serializers import MessageSerializer
+from .models import ChatRoom
+from .serializers import ChatRoomSerializer
 
 
-def get_ready_event_payload(user, *, user_data_key="user"):
+def get_ready_event_payload(user, *, k_user_data="user", k_public_chats="public_chats"):
     return {
-        user_data_key: UserSerializer(user).data
+        k_user_data: UserSerializer(user).data,
+        k_public_chats: ChatRoomSerializer(ChatRoom.objects.filter(is_public=True), many=True).data,
     }
 
 
@@ -19,11 +20,15 @@ class ChatConsumer(WebsocketConsumer):
         user = self.scope["user"]
 
         if user.is_anonymous:
-            self.close(401) # Not Authenticated
-            return
+            return self.close(401) # Not Authenticated
+
+        self.chat_room_name = self.scope['url_route']['kwargs']['room_name']
+
+        if not ChatRoom.objects.filter(id=self.chat_room_name).exists():
+            return self.close(404) # Not Found
 
         async_to_sync(self.channel_layer.group_add)(
-            "chat",
+            self.chat_room_name,
             self.channel_name
         )
 
@@ -40,7 +45,7 @@ class ChatConsumer(WebsocketConsumer):
             return
 
         async_to_sync(self.channel_layer.group_discard)(
-            "chat",
+            self.chat_room_name,
             self.channel_name
         )
 

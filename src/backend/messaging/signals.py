@@ -11,16 +11,16 @@ channel_layer = get_channel_layer()
 
 def dispatch_message_create(sender, instance, created, **kwargs):
     if created:
-        async_to_sync(channel_layer.group_send)("chat", {"type": "message_create",
+        async_to_sync(channel_layer.group_send)(instance.chat_room.id, {"type": "message_create",
                                                          "payload": MessageSerializer(instance).data})
 
     else:
-        async_to_sync(channel_layer.group_send)("chat", {"type": "message_update",
+        async_to_sync(channel_layer.group_send)(instance.chat_room.id, {"type": "message_update",
                                                          "payload": MessageSerializer(instance).data})
 
 
 def dispatch_message_delete(sender, instance, **kwargs):
-    async_to_sync(channel_layer.group_send)("chat", {"type": "message_delete",
+    async_to_sync(channel_layer.group_send)(instance.chat_room.id, {"type": "message_delete",
                                                      "payload": MessageSerializer(instance).data})
 
 
