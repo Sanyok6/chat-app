@@ -1,5 +1,5 @@
 <script>
-    import '../style.css'
+    import '../style.postcss'
 </script>
 
 <slot/>

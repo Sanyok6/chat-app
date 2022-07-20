@@ -23,3 +23,12 @@ export interface Message {
   created_at: string;
   edited_at: string | null;
 }
+
+
+export interface ChatMessagesPaginator {
+  chatId: string;
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Array<Message>;
+}

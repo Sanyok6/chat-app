@@ -34,7 +34,7 @@ class MessageViewSet(viewsets.ModelViewSet):
             return MessageSerializer
 
     def get_queryset(self):
-        return Message.objects.filter(chat_room=self.kwargs['room_pk']).order_by("-created_at")
+        return Message.objects.filter(chat_room=self.kwargs['room_pk']).order_by("created_at")
 
     def perform_create(self, serializer):
         return serializer.save(author=self.request.user, chat_room_id=self.kwargs['room_pk'])
